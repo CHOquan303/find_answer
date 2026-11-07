@@ -162,6 +162,7 @@ def create_answer(
 
     a = models.Answer(question_id=question_id, author_id=user.id, content=data.content)
     db.add(a)
+    db.flush()  # 先生成 a.id，供通知引用
     if q.status == models.QuestionStatus.PENDING.value:
         q.status = models.QuestionStatus.ANSWERED.value
     if q.author_id != user.id:
