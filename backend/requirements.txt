@@ -1,0 +1,18 @@
+# Web 框架
+fastapi
+uvicorn[standard]
+
+# 数据库
+sqlalchemy>=2.0
+psycopg[binary]            # PostgreSQL 驱动（迁移预留）
+
+# 数据校验与配置
+pydantic>=2.0
+pydantic-settings
+
+# 认证
+python-jose[cryptography]  # JWT
+bcrypt                     # 密码哈希
+
+# 表单解析（OAuth2 password flow）
+python-multipart
