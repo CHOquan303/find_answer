@@ -1,16 +1,25 @@
 <template>
-  <div class="container">
-    <SearchBar />
-    <CategoryNav v-model="category" :categories="categories" />
-    <div class="toolbar">
-      <select v-model="sort">
-        <option value="latest">最新</option>
-        <option value="hot">热门</option>
-      </select>
+  <div class="home">
+    <div class="title-row">
+      <h2>问答</h2>
+      <router-link to="/ask" class="btn btn-solid">提问</router-link>
     </div>
 
-    <div v-for="q in items" :key="q.id">
-      <QuestionCard :q="q" />
+    <div class="stat-row">
+      <span class="stat">共 {{ total }} 个问题</span>
+      <div class="filters">
+        <button :class="{ active: sort === 'latest' }" @click="setSort('latest')">最新</button>
+        <button :class="{ active: sort === 'hot' }" @click="setSort('hot')">热门</button>
+      </div>
+    </div>
+
+    <div class="list">
+      <QuestionCard
+        v-for="q in items"
+        :key="q.id"
+        :q="q"
+        :category-name="catName(q.category_id)"
+      />
     </div>
     <p v-if="!items.length" class="empty">滚木</p>
 
@@ -20,23 +29,30 @@
       <button @click="next">下一页</button>
     </div>
   </div>
-
-  <router-link class="ask-fab" to="/ask">提问</router-link>
 </template>
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import api from '../api'
-import SearchBar from '../components/SearchBar.vue'
-import CategoryNav from '../components/CategoryNav.vue'
 import QuestionCard from '../components/QuestionCard.vue'
+
+const route = useRoute()
 
 const categories = ref([])
 const items = ref([])
 const total = ref(0)
 const page = ref(1)
-const category = ref(null)
+const category = ref(route.query.category ? Number(route.query.category) : null)
 const sort = ref('latest')
+
+function catName(id) {
+  return categories.value.find((c) => c.id === id)?.name || ''
+}
+
+function setSort(s) {
+  sort.value = s
+}
 
 async function load() {
   const { data } = await api.listQuestions({
@@ -65,6 +81,13 @@ watch([category, sort], () => {
   load()
 })
 
+watch(
+  () => route.query.category,
+  (v) => {
+    category.value = v ? Number(v) : null
+  }
+)
+
 onMounted(async () => {
   const { data } = await api.listCategories()
   categories.value = data
@@ -73,11 +96,35 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.toolbar {
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 12px;
 }
-.toolbar select {
-  width: auto;
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.stat {
+  font-size: 14px;
+  color: #666;
+}
+.filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+.filters button {
+  flex-shrink: 0;
+  padding: 4px 12px;
+}
+.filters button.active {
+  background: #333;
+  color: #fff;
+  border-color: #333;
 }
 .empty {
   text-align: center;
@@ -90,16 +137,5 @@ onMounted(async () => {
   align-items: center;
   gap: 12px;
   margin-top: 12px;
-}
-.ask-fab {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #333;
-  color: #fff;
-  padding: 12px 24px;
-  border-radius: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 </style>

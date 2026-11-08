@@ -4,8 +4,8 @@ const TOKEN_KEY = 'fa_token'
 const USER_KEY = 'fa_user'
 
 const routes = [
-  { path: '/', name: 'home', component: () => import('../views/HomeView.vue') },
-  { path: '/search', name: 'search', component: () => import('../views/SearchView.vue') },
+  { path: '/', name: 'home', component: () => import('../views/HomeView.vue'), meta: { rail: true } },
+  { path: '/search', name: 'search', component: () => import('../views/SearchView.vue'), meta: { rail: true } },
   { path: '/questions/:id', name: 'question', component: () => import('../views/QuestionDetail.vue') },
   { path: '/ask', name: 'ask', component: () => import('../views/AskQuestion.vue'), meta: { requiresAuth: true } },
   { path: '/login', name: 'login', component: () => import('../views/LoginView.vue') },

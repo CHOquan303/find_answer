@@ -109,3 +109,25 @@ h3 {
   font-size: 16px;
   margin-bottom: 8px;
 }
+
+/* 按钮变体：描边 / 填充 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-outline {
+  background: #fff;
+  color: #333;
+}
+.btn-solid {
+  background: #333;
+  color: #fff;
+  border-color: #333;
+}

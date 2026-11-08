@@ -1,6 +1,6 @@
 <template>
   <div class="search">
-    <input v-model="keyword" @keyup.enter="go" />
+    <input v-model="keyword" @keyup.enter="go" placeholder="搜索" />
     <button @click="go">搜索</button>
   </div>
 </template>
@@ -23,7 +23,6 @@ function go() {
 .search {
   display: flex;
   gap: 8px;
-  margin-bottom: 12px;
 }
 .search input {
   flex: 1;
