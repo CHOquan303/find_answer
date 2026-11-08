@@ -1,14 +1,16 @@
 <template>
-  <form @submit.prevent="submit">
-    <select v-model="categoryId">
-      <option :value="null">滚木（分类可选）</option>
-      <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
-    </select>
-    <input v-model="title" placeholder="标题" />
-    <textarea v-model="content" placeholder="滚木"></textarea>
-    <button type="submit">提问</button>
-  </form>
-  <p v-if="error">{{ error }}</p>
+  <div class="container">
+    <form class="form" @submit.prevent="submit">
+      <select v-model="categoryId">
+        <option :value="null">滚木（分类可选）</option>
+        <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+      </select>
+      <input v-model="title" placeholder="标题" />
+      <textarea v-model="content" placeholder="滚木"></textarea>
+      <button type="submit">提问</button>
+    </form>
+    <p v-if="error">{{ error }}</p>
+  </div>
 </template>
 
 <script setup>
@@ -42,3 +44,11 @@ onMounted(async () => {
   categories.value = data
 })
 </script>
+
+<style scoped>
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+</style>

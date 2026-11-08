@@ -1,27 +1,41 @@
 <template>
-  <h3>滚木（名单）</h3>
-  <input type="file" @change="onFile" />
-  <p v-if="imported !== null">已导入 {{ imported }} 条</p>
+  <div class="container">
+    <section class="card">
+      <h3>滚木（名单）</h3>
+      <input type="file" @change="onFile" />
+      <p v-if="imported !== null">已导入 {{ imported }} 条</p>
+    </section>
 
-  <h3>滚木（分类）</h3>
-  <input v-model="categoryName" placeholder="分类名" />
-  <button @click="addCategory">新增分类</button>
-  <div v-for="c in categories" :key="c.id">
-    <span>{{ c.name }}</span>
-    <button @click="removeCategory(c.id)">删除</button>
+    <section class="card">
+      <h3>滚木（分类）</h3>
+      <div class="row">
+        <input v-model="categoryName" placeholder="分类名" />
+        <button @click="addCategory">新增分类</button>
+      </div>
+      <div v-for="c in categories" :key="c.id" class="row">
+        <span>{{ c.name }}</span>
+        <button @click="removeCategory(c.id)">删除</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>滚木（举报审核）</h3>
+      <div v-for="r in reports" :key="r.id" class="report">
+        <span>回答#{{ r.answer_id }} · {{ r.reason }} · {{ r.status }}</span>
+        <button v-if="r.status === 'pending'" @click="review(r.id, 'confirmed')">确认</button>
+        <button v-if="r.status === 'pending'" @click="review(r.id, 'dismissed')">驳回</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>滚木（违规删除）</h3>
+      <div class="row">
+        <input v-model.number="delId" placeholder="问题/回答 ID" />
+        <button @click="delQuestion">删问题</button>
+        <button @click="delAnswer">删回答</button>
+      </div>
+    </section>
   </div>
-
-  <h3>滚木（举报审核）</h3>
-  <div v-for="r in reports" :key="r.id">
-    <span>回答#{{ r.answer_id }} · {{ r.reason }} · {{ r.status }}</span>
-    <button v-if="r.status === 'pending'" @click="review(r.id, 'confirmed')">确认</button>
-    <button v-if="r.status === 'pending'" @click="review(r.id, 'dismissed')">驳回</button>
-  </div>
-
-  <h3>滚木（违规删除）</h3>
-  <input v-model.number="delId" placeholder="问题/回答 ID" />
-  <button @click="delQuestion">删问题</button>
-  <button @click="delAnswer">删回答</button>
 </template>
 
 <script setup>
@@ -86,3 +100,23 @@ onMounted(() => {
   loadReports()
 })
 </script>
+
+<style scoped>
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+.row input {
+  flex: 1;
+  width: auto;
+}
+.report {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+</style>

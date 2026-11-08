@@ -1,6 +1,8 @@
 <template>
-  <input v-model="keyword" @keyup.enter="go" />
-  <button @click="go">搜索</button>
+  <div class="search">
+    <input v-model="keyword" @keyup.enter="go" />
+    <button @click="go">搜索</button>
+  </div>
 </template>
 
 <script setup>
@@ -16,3 +18,15 @@ function go() {
   if (q) router.push({ name: 'search', query: { q } })
 }
 </script>
+
+<style scoped>
+.search {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.search input {
+  flex: 1;
+  width: auto;
+}
+</style>

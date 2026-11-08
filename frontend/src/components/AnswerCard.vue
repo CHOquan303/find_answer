@@ -1,25 +1,32 @@
 <template>
-  <div>
-    <p>
-      {{ answer.author.real_name }}
+  <div class="card answer-card">
+    <div class="head">
+      <span class="author">{{ answer.author.real_name }}</span>
       <ConfidenceBadge :title="answer.author.confidence_title" />
-    </p>
-    <p>{{ answer.content }}</p>
-    <p v-if="answer.is_accepted">[已采纳]</p>
-    <p>点赞 {{ answer.like_count }}</p>
+    </div>
+    <p class="content">{{ answer.content }}</p>
+    <p v-if="answer.is_accepted" class="accepted">[已采纳]</p>
+    <div class="actions">
+      <span class="likes">点赞 {{ answer.like_count }}</span>
+      <button v-if="isLoggedIn" @click="like">点赞</button>
+      <button v-if="isLoggedIn" @click="report">举报</button>
+      <button v-if="isQuestioner && !answer.is_accepted" @click="accept">采纳</button>
+      <button v-if="isLoggedIn" @click="showReply = !showReply">追问</button>
+    </div>
 
-    <button v-if="isLoggedIn" @click="like">点赞</button>
-    <button v-if="isLoggedIn" @click="report">举报</button>
-    <button v-if="isQuestioner && !answer.is_accepted" @click="accept">采纳</button>
-    <button v-if="isLoggedIn" @click="showReply = !showReply">追问</button>
-
-    <div v-if="showReply">
-      <input v-model="replyContent" placeholder="滚木" />
+    <div v-if="showReply" class="reply-form">
+      <input v-model="replyContent" />
       <button @click="submitReply">提交追问</button>
     </div>
 
-    <div v-for="r in answer.replies" :key="r.id">
-      <ReplyItem :reply="r" :answer-id="answer.id" @refresh="$emit('refresh')" />
+    <div class="replies">
+      <ReplyItem
+        v-for="r in answer.replies"
+        :key="r.id"
+        :reply="r"
+        :answer-id="answer.id"
+        @refresh="$emit('refresh')"
+      />
     </div>
   </div>
 </template>
@@ -70,3 +77,44 @@ async function submitReply() {
   emit('refresh')
 }
 </script>
+
+<style scoped>
+.head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.author {
+  font-weight: 600;
+}
+.content {
+  margin-bottom: 8px;
+}
+.accepted {
+  color: #666;
+  margin-bottom: 8px;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.likes {
+  font-size: 13px;
+  color: #999;
+}
+.reply-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.reply-form input {
+  flex: 1;
+  width: auto;
+}
+.replies {
+  margin-top: 4px;
+}
+</style>

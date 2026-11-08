@@ -1,12 +1,14 @@
 <template>
-  <SearchBar />
-  <p v-if="!q">滚木</p>
-  <div v-for="item in items" :key="item.id">
-    <router-link :to="{ name: 'question', params: { id: item.id } }">
-      {{ item.title }}
-    </router-link>
+  <div class="container">
+    <SearchBar />
+    <p v-if="!q" class="empty">滚木</p>
+    <div v-for="item in items" :key="item.id" class="card result">
+      <router-link :to="{ name: 'question', params: { id: item.id } }">
+        {{ item.title }}
+      </router-link>
+    </div>
+    <p v-if="q && !items.length" class="empty">滚木</p>
   </div>
-  <p v-if="q && !items.length">滚木</p>
 </template>
 
 <script setup>
@@ -38,3 +40,14 @@ watch(
 
 onMounted(load)
 </script>
+
+<style scoped>
+.empty {
+  text-align: center;
+  color: #999;
+  padding: 24px 0;
+}
+.result {
+  padding: 12px 16px;
+}
+</style>

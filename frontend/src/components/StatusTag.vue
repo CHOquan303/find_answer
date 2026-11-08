@@ -1,5 +1,5 @@
 <template>
-  <span>{{ label }}</span>
+  <span class="tag">{{ label }}</span>
 </template>
 
 <script setup>

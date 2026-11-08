@@ -1,13 +1,19 @@
 <template>
-  <div>
-    <p>{{ reply.author.real_name }}: {{ reply.content }}</p>
+  <div class="reply">
+    <p class="content">{{ reply.author.real_name }}: {{ reply.content }}</p>
     <button v-if="isLoggedIn" @click="show = !show">回复</button>
-    <div v-if="show">
-      <input v-model="content" placeholder="滚木" />
+    <div v-if="show" class="form">
+      <input v-model="content" />
       <button @click="submit">提交</button>
     </div>
-    <div v-for="c in reply.children" :key="c.id">
-      <ReplyItem :reply="c" :answer-id="answerId" @refresh="$emit('refresh')" />
+    <div class="children">
+      <ReplyItem
+        v-for="c in reply.children"
+        :key="c.id"
+        :reply="c"
+        :answer-id="answerId"
+        @refresh="$emit('refresh')"
+      />
     </div>
   </div>
 </template>
@@ -38,3 +44,26 @@ async function submit() {
   emit('refresh')
 }
 </script>
+
+<style scoped>
+.reply {
+  border-left: 2px solid #eee;
+  padding-left: 12px;
+  margin-top: 10px;
+}
+.content {
+  margin-bottom: 6px;
+}
+.form {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.form input {
+  flex: 1;
+  width: auto;
+}
+.children {
+  margin-left: 12px;
+}
+</style>

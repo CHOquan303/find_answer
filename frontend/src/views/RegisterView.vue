@@ -1,21 +1,23 @@
 <template>
-  <form @submit.prevent="submit">
-    <input v-model="username" placeholder="用户名" />
-    <input v-model="password" type="password" placeholder="密码" />
-    <input v-model="realName" placeholder="真实姓名" />
-    <input v-model="studentId" placeholder="学号（可选）" />
-    <select v-model="grade">
-      <option value="">滚木（年级可选）</option>
-      <option value="freshman">大一</option>
-      <option value="sophomore">大二</option>
-      <option value="junior">大三</option>
-      <option value="senior">大四</option>
-    </select>
-    <button type="submit">注册</button>
-  </form>
-  <p v-if="error">{{ error }}</p>
-  <p v-if="result">{{ result.verify_hint }}</p>
-  <router-link to="/login">登录</router-link>
+  <div class="container">
+    <form class="form" @submit.prevent="submit">
+      <input v-model="username" placeholder="用户名" />
+      <input v-model="password" type="password" placeholder="密码" />
+      <input v-model="realName" placeholder="真实姓名" />
+      <input v-model="studentId" placeholder="学号（可选）" />
+      <select v-model="grade">
+        <option value="">滚木（年级可选）</option>
+        <option value="freshman">大一</option>
+        <option value="sophomore">大二</option>
+        <option value="junior">大三</option>
+        <option value="senior">大四</option>
+      </select>
+      <button type="submit">注册</button>
+    </form>
+    <p v-if="error">{{ error }}</p>
+    <p v-if="result">{{ result.verify_hint }}</p>
+    <router-link to="/login">登录</router-link>
+  </div>
 </template>
 
 <script setup>
@@ -47,3 +49,12 @@ async function submit() {
   }
 }
 </script>
+
+<style scoped>
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+</style>

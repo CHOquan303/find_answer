@@ -1,10 +1,12 @@
 <template>
-  <div v-if="detail">
-    <h2>{{ detail.title }}</h2>
-    <p>{{ detail.content }}</p>
-    <StatusTag :status="detail.status" />
-    <p>提问者: {{ detail.author.real_name }} · {{ detail.created_at }}</p>
-    <button v-if="isQuestioner" @click="resolve">标注已解决</button>
+  <div v-if="detail" class="container">
+    <div class="card">
+      <h2>{{ detail.title }}</h2>
+      <p class="q-content">{{ detail.content }}</p>
+      <StatusTag :status="detail.status" />
+      <p class="meta">提问者: {{ detail.author.real_name }} · {{ detail.created_at }}</p>
+      <button v-if="isQuestioner" @click="resolve">标注已解决</button>
+    </div>
 
     <div v-for="a in detail.answers" :key="a.id">
       <AnswerCard
@@ -14,13 +16,13 @@
         @refresh="load"
       />
     </div>
-    <p v-if="!detail.answers.length">滚木</p>
+    <p v-if="!detail.answers.length" class="empty">滚木</p>
 
-    <div v-if="canAnswer">
-      <textarea v-model="answerContent" placeholder="滚木"></textarea>
+    <div v-if="canAnswer" class="card answer-form">
+      <textarea v-model="answerContent"></textarea>
       <button @click="submitAnswer">回答</button>
     </div>
-    <p v-else-if="isLoggedIn">滚木（无回答权限）</p>
+    <p v-else-if="isLoggedIn" class="empty">滚木（无回答权限）</p>
   </div>
 </template>
 
@@ -64,3 +66,25 @@ async function submitAnswer() {
 
 onMounted(load)
 </script>
+
+<style scoped>
+.q-content {
+  color: #666;
+  margin-bottom: 8px;
+}
+.meta {
+  font-size: 13px;
+  color: #999;
+  margin: 8px 0;
+}
+.empty {
+  text-align: center;
+  color: #999;
+  padding: 24px 0;
+}
+.answer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+</style>

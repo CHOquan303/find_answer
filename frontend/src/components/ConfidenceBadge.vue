@@ -1,5 +1,5 @@
 <template>
-  <span>{{ title || '滚木' }}</span>
+  <span class="tag">{{ title || '滚木' }}</span>
 </template>
 
 <script setup>
