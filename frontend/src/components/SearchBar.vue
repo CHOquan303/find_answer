@@ -1,5 +1,5 @@
 <template>
-  <input v-model="keyword" placeholder="滚木" @keyup.enter="go" />
+  <input v-model="keyword" @keyup.enter="go" />
   <button @click="go">搜索</button>
 </template>
 
