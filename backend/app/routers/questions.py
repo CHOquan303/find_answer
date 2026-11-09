@@ -54,12 +54,24 @@ def _answer_out(a: models.Answer) -> schemas.AnswerOut:
 def list_questions(
     page: int = Query(1, ge=1),
     category: Optional[int] = None,
+    status: Optional[str] = None,
     sort: str = "latest",
     db: Session = Depends(get_db),
 ):
     base = db.query(models.Question).options(selectinload(models.Question.author))
     if category:
         base = base.filter(models.Question.category_id == category)
+    if status == "resolved":
+        base = base.filter(models.Question.status == models.QuestionStatus.RESOLVED.value)
+    elif status == "unresolved":
+        base = base.filter(
+            models.Question.status.in_(
+                [
+                    models.QuestionStatus.PENDING.value,
+                    models.QuestionStatus.ANSWERED.value,
+                ]
+            )
+        )
     total = base.count()
 
     if sort == "hot":

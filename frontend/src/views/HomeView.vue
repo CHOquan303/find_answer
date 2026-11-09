@@ -8,8 +8,9 @@
     <div class="stat-row">
       <span class="stat">共 {{ total }} 个问题</span>
       <div class="filters">
-        <button :class="{ active: sort === 'latest' }" @click="setSort('latest')">最新</button>
-        <button :class="{ active: sort === 'hot' }" @click="setSort('hot')">热门</button>
+        <button :class="{ active: status === null }" @click="setStatus(null)">全部</button>
+        <button :class="{ active: status === 'unresolved' }" @click="setStatus('unresolved')">未解决</button>
+        <button :class="{ active: status === 'resolved' }" @click="setStatus('resolved')">已解决</button>
       </div>
     </div>
 
@@ -26,16 +27,18 @@
     <div class="pager">
       <button :disabled="page <= 1" @click="prev">上一页</button>
       <span>{{ page }}</span>
-      <button @click="next">下一页</button>
+      <button :disabled="page >= totalPages" @click="next">下一页</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '../api'
 import QuestionCard from '../components/QuestionCard.vue'
+
+const PAGE_SIZE = 20
 
 const route = useRoute()
 
@@ -44,21 +47,23 @@ const items = ref([])
 const total = ref(0)
 const page = ref(1)
 const category = ref(route.query.category ? Number(route.query.category) : null)
-const sort = ref('latest')
+const status = ref(null)
+
+const totalPages = computed(() => Math.ceil(total.value / PAGE_SIZE))
 
 function catName(id) {
   return categories.value.find((c) => c.id === id)?.name || ''
 }
 
-function setSort(s) {
-  sort.value = s
+function setStatus(s) {
+  status.value = s
 }
 
 async function load() {
   const { data } = await api.listQuestions({
     page: page.value,
     category: category.value,
-    sort: sort.value,
+    status: status.value,
   })
   items.value = data.items
   total.value = data.total
@@ -76,7 +81,7 @@ function next() {
   load()
 }
 
-watch([category, sort], () => {
+watch([category, status], () => {
   page.value = 1
   load()
 })

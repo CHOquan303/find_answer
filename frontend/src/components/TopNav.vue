@@ -31,8 +31,10 @@ const router = useRouter()
 const auth = useAuthStore()
 
 function logout() {
-  auth.logout()
-  router.push('/')
+  if (window.confirm('确认退出登录？')) {
+    auth.logout()
+    router.push('/')
+  }
 }
 </script>
 
